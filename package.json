@@ -1,0 +1,13 @@
+{
+  "name": "gha-workflows",
+  "version": "1.0.0",
+  "description": "Reusable GitHub Actions workflows for various tasks",
+  "private": true,
+  "scripts": {
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "prettier": "3.6.2"
+  }
+}
