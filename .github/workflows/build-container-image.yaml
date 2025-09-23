@@ -1,0 +1,53 @@
+name: Build Container Image
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        required: false
+        type: string
+        default: ${{ github.repository }}
+      tag:
+        required: false
+        type: string
+        default: ${{ github.sha }}
+      registry:
+        required: false
+        type: string
+        default: ghcr.io
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v4
+
+      - name: Get commit timestamp
+        id: commit_timestamp
+        run: echo "timestamp=$(git show -s --format=%ct ${{ github.sha }})" >> $GITHUB_OUTPUT
+
+      - name: Log into Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ inputs.registry }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build OCI Container Images
+        uses: docker/build-push-action@v6
+        env:
+          SOURCE_DATE_EPOCH: ${{ steps.commit_timestamp.outputs.timestamp }}
+        with:
+          context: ./
+          push: false
+          tags: |
+            ${{ inputs.registry }}/${{ inputs.name }}:${{ inputs.tag }}
+            ${{ inputs.registry }}/${{ inputs.name }}:latest
+          cache-from: type=gha,scope=${{ inputs.name }}
+          cache-to: type=gha,mode=max,scope=${{ inputs.name }}
