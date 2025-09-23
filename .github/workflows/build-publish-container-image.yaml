@@ -15,6 +15,18 @@ on:
         required: false
         type: string
         default: ghcr.io
+      context:
+        required: false
+        type: string
+        default: .
+      file:
+        required: false
+        type: string
+        default: ./Dockerfile
+      publish:
+        required: false
+        type: boolean
+        default: ${{ github.ref_name == 'main' }}
 
 jobs:
   build:
@@ -48,8 +60,9 @@ jobs:
         env:
           SOURCE_DATE_EPOCH: ${{ steps.commit_timestamp.outputs.timestamp }}
         with:
-          context: ./
-          push: ${{ github.ref_name == 'main' }}
+          context: ${{ inputs.context }}
+          file: ${{ inputs.file }}
+          push: ${{ inputs.publish }}
           tags: |
             ${{ inputs.registry }}/${{ inputs.name }}:${{ inputs.tag }}
             ${{ inputs.registry }}/${{ inputs.name }}:latest
