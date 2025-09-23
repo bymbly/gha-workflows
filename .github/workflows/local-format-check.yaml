@@ -1,0 +1,14 @@
+name: Format Check
+
+on:
+  push:
+    branches:
+      - main
+      - renovate/**
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  format:
+    name: Format Check
+    uses: bymbly/gha-workflows/.github/workflows/prettier-format-check.yaml@main
