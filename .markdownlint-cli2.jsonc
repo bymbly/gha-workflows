@@ -2,9 +2,9 @@
   "$schema": "https://raw.githubusercontent.com/DavidAnson/markdownlint-cli2/refs/heads/main/schema/markdownlint-cli2-config-schema.json",
   "config": {
     "line-length": {
-      "line_length": 120,
-    },
+      "line_length": 120
+    }
   },
   "globs": ["**/*.md"],
-  "ignores": ["node_modules"],
+  "ignores": ["node_modules"]
 }
