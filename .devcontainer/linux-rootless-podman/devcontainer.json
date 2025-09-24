@@ -24,6 +24,7 @@
         "davidanson.vscode-markdownlint",
         "donjayamanne.githistory",
         "editorconfig.editorconfig",
+        "esbenp.prettier-vscode",
         "foxundermoon.shell-format",
         "github.codespaces",
         "github.copilot",
