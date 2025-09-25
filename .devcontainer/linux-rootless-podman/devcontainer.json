@@ -15,6 +15,9 @@
     "--userns=keep-id",
     "--volume=${localWorkspaceFolder}:/workspaces/${localWorkspaceFolderBasename}:Z"
   ],
+  "mounts": [
+    "source=bymbly-fish-cache-${localWorkspaceFolderBasename},target=/home/bymbly/.local/share/fish,type=volume"
+  ],
   "postCreateCommand": "asdf install",
   "customizations": {
     "vscode": {
