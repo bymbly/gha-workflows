@@ -1,0 +1,33 @@
+name: Redocly Lint Check
+
+on:
+  workflow_call:
+    inputs:
+      redocly-version:
+        required: false
+        type: string
+        default: "latest"
+      apis:
+        # by default, lint all apis specified in redocly.yaml
+        required: false
+        type: string
+
+jobs:
+  lint:
+    name: Redocly Lint Check
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
+
+      - name: Lint Check
+        run: npx @redocly/cli@${{ inputs.redocly-version }} lint ${{ inputs.apis }}
