@@ -1,0 +1,33 @@
+name: Spectral Lint Check
+
+on:
+  workflow_call:
+    inputs:
+      spectral-version:
+        required: false
+        type: string
+        default: "latest"
+      file-glob:
+        required: false
+        type: string
+        default: "./{openapi, asyncapi, arazzo}/*{json,yml,yaml}"
+
+jobs:
+  lint:
+    name: Spectral Lint Check
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
+
+      - name: Lint Check
+        run: npx @stoplight/spectral@${{ inputs.spectral-version }} lint --fail-severity warn ${{ inputs.file-glob }}
