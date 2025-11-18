@@ -9,7 +9,7 @@ on:
         default: "latest"
 
 jobs:
-  format:
+  lint:
     name: Markdown Lint Check
     runs-on: ubuntu-latest
 
