@@ -30,4 +30,4 @@ jobs:
           node-version: latest
 
       - name: Lint Check
-        run: npx @stoplight/spectral@${{ inputs.spectral-version }} lint --fail-severity warn ${{ inputs.file-glob }}
+        run: npx @stoplight/spectral-cli@${{ inputs.spectral-version }} lint --fail-severity warn ${{ inputs.file-glob }}
