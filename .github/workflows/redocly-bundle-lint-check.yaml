@@ -1,0 +1,36 @@
+name: Redocly Bundle Lint Check
+
+on:
+  workflow_call:
+    inputs:
+      redocly-version:
+        required: false
+        type: string
+        default: "latest"
+      root-file:
+        required: false
+        type: string
+        default: "./openapi/root.yaml"
+
+jobs:
+  bundle-lint:
+    name: Redocly Bundle Lint Check
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: latest
+
+      - name: Bundle APIs
+        run: npx @redocly/cli@${{ inputs.redocly-version }} bundle ${{ inputs.root-file }} --output bundled.yaml
+
+      - name: Lint Check
+        run: npx @redocly/cli@${{ inputs.redocly-version }} lint bundled.yaml
