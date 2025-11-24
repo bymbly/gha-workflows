@@ -1,0 +1,51 @@
+name: Publish Node.js Package
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: "latest"
+      cache-dependency-manager:
+        required: false
+        type: string
+        default: "npm"
+      registry-url:
+        required: false
+        type: string
+        default: "https://npm.pkg.github.com"
+      package-scope:
+        required: false
+        type: string
+        default: "@bymbly"
+      package-tag:
+        required: false
+        type: string
+        default: "latest"
+
+jobs:
+  publish:
+    name: Publish Node.js Package
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v5
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ inputs.cache-dependency-manager }}
+          registry-url: ${{ inputs.registry-url }}
+          scope: ${{ inputs.package-scope }}
+
+      - run: npm ci
+      - run: npm publish --tag ${{ inputs.package-tag }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
