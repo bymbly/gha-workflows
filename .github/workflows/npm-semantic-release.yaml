@@ -1,0 +1,55 @@
+name: npm Semantic Release
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        required: false
+        type: string
+        default: "latest"
+      cache-dependency-manager:
+        required: false
+        type: string
+        default: "npm"
+      registry-url:
+        required: false
+        type: string
+        default: "https://npm.pkg.github.com"
+      package-scope:
+        required: false
+        type: string
+        default: "@bymbly"
+
+jobs:
+  semantic-release:
+    name: npm Semantic Release
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      packages: write
+      issues: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ inputs.cache-dependency-manager }}
+          registry-url: ${{ inputs.registry-url }}
+          scope: ${{ inputs.package-scope }}
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Semantic Release
+        run: npx semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
