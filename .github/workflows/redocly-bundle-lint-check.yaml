@@ -11,6 +11,10 @@ on:
         required: false
         type: string
         default: "./openapi/root.yaml"
+      cache-dependency-manager:
+        required: false
+        type: string
+        default: "npm"
 
 jobs:
   bundle-lint:
@@ -28,12 +32,7 @@ jobs:
         uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6
         with:
           node-version: latest
-
-      - name: Cache npm packages
-        uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4
-        with:
-          path: ~/.npm
-          key: npm-cache-${{ runner.os }}
+          cache: ${{ inputs.cache-dependency-manager }}
 
       - name: Bundle APIs
         run: npx @redocly/cli@${{ inputs.redocly-version }} bundle ${{ inputs.root-file }} --output bundled.yaml
