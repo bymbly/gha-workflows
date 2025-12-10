@@ -7,10 +7,10 @@ on:
         required: false
         type: string
         default: "latest"
-      root-file:
+      openapi-file:
         required: false
         type: string
-        default: "./openapi/root.yaml"
+        default: "./openapi/openapi.yaml"
       cache-dependency-manager:
         required: false
         type: string
@@ -35,7 +35,7 @@ jobs:
           cache: ${{ inputs.cache-dependency-manager }}
 
       - name: Bundle APIs
-        run: npx @redocly/cli@${{ inputs.redocly-version }} bundle ${{ inputs.root-file }} --output bundled.yaml
+        run: npx @redocly/cli@${{ inputs.redocly-version }} bundle ${{ inputs.openapi-file }} --output bundled.yaml
 
       - name: Lint Check
         run: npx @redocly/cli@${{ inputs.redocly-version }} lint bundled.yaml
