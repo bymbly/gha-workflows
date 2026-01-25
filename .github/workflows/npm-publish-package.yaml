@@ -50,6 +50,7 @@ jobs:
           scope: ${{ inputs.package-scope }}
 
       - run: npm ci
+      - run: npm audit signatures
       - run: npm publish --tag ${{ inputs.package-tag }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN || secrets.GITHUB_TOKEN }}
