@@ -37,6 +37,7 @@ jobs:
         with:
           node-version: ${{ inputs.node-version }}
           cache: ${{ inputs.cache-dependency-manager }}
+          log-resolution: true
 
       - name: Check Formatting
         run: npx prettier@${{ inputs.prettier-version }} --check ${{ inputs.check-path }}
