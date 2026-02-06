@@ -49,7 +49,7 @@ inputs:
   log-resolution:
     description: Prints a brief summary of how the Node version was resolved.
     required: false
-    default: "false"
+    default: "true"
 
   registry-url:
     description: Optional registry URL for auth (passed through to actions/setup-node).
