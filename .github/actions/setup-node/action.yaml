@@ -1,0 +1,145 @@
+name: Setup Node
+description: >
+  Setup Node.js using an explicit version override, or version files (.tool-versions, .nvmrc, .node-version) if available.
+  Falls back to the latest LTS version if no version is specified and no version files are found.
+  Requires the repository to be checked out before using this action.
+  For more details on available inputs and outputs, see: https://github.com/actions/setup-node
+
+inputs:
+  node-version:
+    description: Node version specifier override (e.g., 22.17.1, 22.x, lts/*, latest).
+    required: false
+    default: ""
+
+  fallback-node-version:
+    description: >
+      Fallback Node version specifier to use if no version is specified and no version files are found.
+      Defaults to latest LTS version.
+    required: false
+    default: "lts/*"
+
+  cache:
+    description: >
+      Specify a package manager for caching in the default directory.
+      Supported values are 'npm', 'yarn', and 'pnpm'.
+      Package manager should be pre-installed.
+    required: false
+    default: ""
+
+  cache-dependency-path:
+    description: >
+      Path to the dependency file (e.g., package-lock.json, yarn.lock, pnpm-lock.yaml) for caching.
+      Useful for monorepos, multi-workspaces, and non-conventional project structures.
+    required: false
+    default: ""
+
+  package-manager-cache:
+    description: Controls setup-node automatic npm caching (passed through). Set to "false" to disable auto caching.
+    required: false
+    default: "true"
+
+  check-latest:
+    description: >
+      Check for the latest Node version that satisfies the specified version range, instead of using a cached version.
+      It will only affect version ranges, such as "16.x", "18.x", "lts/*", etc.
+      Exact versions will not be affected.
+    required: false
+    default: "false"
+
+  log-resolution:
+    description: Prints a brief summary of how the Node version was resolved.
+    required: false
+    default: "false"
+
+  registry-url:
+    description: Optional registry URL for auth (passed through to actions/setup-node).
+    required: false
+    default: ""
+
+  scope:
+    description: Optional npm scope for auth (passed through to actions/setup-node).
+    required: false
+    default: ""
+
+outputs:
+  resolved-source:
+    description: Where the Node version was resolved from (override, .tool-versions, .nvmrc, .node-version, fallback)
+    value: ${{ steps.resolve.outputs.source }}
+
+  resolved-node-version:
+    description: Resolved Node version specifier that was used (override or fallback), if applicable.
+    value: ${{ steps.resolve.outputs.node_version }}
+
+  resolved-node-version-file:
+    description: Resolved version file that was used (.tool-versions, .nvmrc, .node-version), if applicable.
+    value: ${{ steps.resolve.outputs.node_version_file }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Resolve Node version source
+      id: resolve
+      shell: bash
+      run: |
+        set -euo pipefail
+
+        if [[ -n "${{ inputs.node-version }}" ]]; then
+          echo "source=override" >> "$GITHUB_OUTPUT"
+          echo "node_version=${{ inputs.node-version }}" >> "$GITHUB_OUTPUT"
+          echo "node_version_file=" >> "$GITHUB_OUTPUT"
+
+        elif [[ -f ".tool-versions" ]]; then
+          echo "source=.tool-versions" >> "$GITHUB_OUTPUT"
+          echo "node_version=" >> "$GITHUB_OUTPUT"
+          echo "node_version_file=.tool-versions" >> "$GITHUB_OUTPUT"
+
+        elif [[ -f ".nvmrc" ]]; then
+          echo "source=.nvmrc" >> "$GITHUB_OUTPUT"
+          echo "node_version=" >> "$GITHUB_OUTPUT"
+          echo "node_version_file=.nvmrc" >> "$GITHUB_OUTPUT"
+
+        elif [[ -f ".node-version" ]]; then
+          echo "source=.node-version" >> "$GITHUB_OUTPUT"
+          echo "node_version=" >> "$GITHUB_OUTPUT"
+          echo "node_version_file=.node-version" >> "$GITHUB_OUTPUT"
+
+        else
+          echo "source=fallback" >> "$GITHUB_OUTPUT"
+          echo "node_version=${{ inputs.fallback-node-version }}" >> "$GITHUB_OUTPUT"
+          echo "node_version_file=" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Node resolution summary
+      if: ${{ inputs.log-resolution == 'true' }}
+      shell: bash
+      run: |
+        echo "Node resolution source: ${{ steps.resolve.outputs.source }}"
+        if [[ -n "${{ steps.resolve.outputs.node_version_file }}" ]]; then
+          echo "Node version file: ${{ steps.resolve.outputs.node_version_file }}"
+        else
+          echo "Node version: ${{ steps.resolve.outputs.node_version }}"
+        fi
+
+    - name: Setup Node (from version file)
+      if: ${{ steps.resolve.outputs.node_version_file != '' }}
+      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+      with:
+        node-version-file: ${{ steps.resolve.outputs.node_version_file }}
+        cache: ${{ inputs.cache }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+        package-manager-cache: ${{ inputs.package-manager-cache }}
+        check-latest: ${{ inputs.check-latest }}
+        registry-url: ${{ inputs.registry-url }}
+        scope: ${{ inputs.scope }}
+
+    - name: Setup Node (from specified version)
+      if: ${{ steps.resolve.outputs.node_version_file == '' }}
+      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+      with:
+        node-version: ${{ steps.resolve.outputs.node_version }}
+        cache: ${{ inputs.cache }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+        package-manager-cache: ${{ inputs.package-manager-cache }}
+        check-latest: ${{ inputs.check-latest }}
+        registry-url: ${{ inputs.registry-url }}
+        scope: ${{ inputs.scope }}

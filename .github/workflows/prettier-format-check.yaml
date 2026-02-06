@@ -3,6 +3,10 @@ name: Prettier Format Check
 on:
   workflow_call:
     inputs:
+      node-version:
+        required: false
+        type: string
+        default: ""
       prettier-version:
         required: false
         type: string
@@ -29,10 +33,11 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Setup Node.js
-        uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+        uses: ./.github/actions/setup-node@main
         with:
-          node-version: latest
+          node-version: ${{ inputs.node-version }}
           cache: ${{ inputs.cache-dependency-manager }}
+          log-resolution: true
 
       - name: Check Formatting
         run: npx prettier@${{ inputs.prettier-version }} --check ${{ inputs.check-path }}
