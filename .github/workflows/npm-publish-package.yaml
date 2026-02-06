@@ -6,7 +6,7 @@ on:
       node-version:
         required: false
         type: string
-        default: "latest"
+        default: ""
       cache-dependency-manager:
         required: false
         type: string
