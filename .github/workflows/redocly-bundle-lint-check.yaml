@@ -38,6 +38,9 @@ jobs:
           node-version: ${{ inputs.node-version }}
           cache: ${{ inputs.cache-dependency-manager }}
 
+      - name: Install Dependencies
+        run: npm ci
+
       - name: Bundle APIs
         run: npx @redocly/cli@${{ inputs.redocly-version }} bundle ${{ inputs.openapi-file }} --output bundled.yaml
 
