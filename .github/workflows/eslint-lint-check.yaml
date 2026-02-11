@@ -10,7 +10,7 @@ on:
       eslint-version:
         required: false
         type: string
-        default: "latest"
+        default: ""
       check-path:
         required: false
         type: string
@@ -42,4 +42,4 @@ jobs:
         run: npm ci
 
       - name: Run ESlint
-        run: npx eslint@${{ inputs.eslint-version }} ${{ inputs.check-path }}
+        run: npx --yes eslint${{ inputs.eslint-version && format('@{0}', inputs.eslint-version) || '' }} ${{ inputs.check-path }}

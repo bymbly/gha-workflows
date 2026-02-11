@@ -10,11 +10,11 @@ on:
       spectral-version:
         required: false
         type: string
-        default: "latest"
+        default: ""
       file-glob:
         required: false
         type: string
-        default: "./{openapi, asyncapi, arazzo}/*{json,yml,yaml}"
+        default: "./{openapi,asyncapi,arazzo}/*.{json,yml,yaml}"
       cache-dependency-manager:
         required: false
         type: string
@@ -42,4 +42,4 @@ jobs:
         run: npm ci
 
       - name: Lint Check
-        run: npx @stoplight/spectral-cli@${{ inputs.spectral-version }} lint --fail-severity warn ${{ inputs.file-glob }}
+        run: npx --yes @stoplight/spectral-cli${{ inputs.spectral-version && format('@{0}', inputs.spectral-version) || '' }} lint --fail-severity warn ${{ inputs.file-glob }}

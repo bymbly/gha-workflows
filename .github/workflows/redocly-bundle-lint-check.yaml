@@ -10,7 +10,7 @@ on:
       redocly-version:
         required: false
         type: string
-        default: "latest"
+        default: ""
       openapi-file:
         required: false
         type: string
@@ -42,7 +42,7 @@ jobs:
         run: npm ci
 
       - name: Bundle APIs
-        run: npx @redocly/cli@${{ inputs.redocly-version }} bundle ${{ inputs.openapi-file }} --output bundled.yaml
+        run: npx --yes @redocly/cli${{ inputs.redocly-version && format('@{0}', inputs.redocly-version) || '' }} bundle ${{ inputs.openapi-file }} --output bundled.yaml
 
       - name: Lint Check
-        run: npx @redocly/cli@${{ inputs.redocly-version }} lint bundled.yaml
+        run: npx --yes @redocly/cli${{ inputs.redocly-version && format('@{0}', inputs.redocly-version) || '' }} lint bundled.yaml

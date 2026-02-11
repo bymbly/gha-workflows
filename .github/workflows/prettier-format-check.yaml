@@ -10,7 +10,7 @@ on:
       prettier-version:
         required: false
         type: string
-        default: "latest"
+        default: ""
       check-path:
         required: false
         type: string
@@ -42,4 +42,4 @@ jobs:
         run: npm ci
 
       - name: Check Formatting
-        run: npx prettier@${{ inputs.prettier-version }} --check ${{ inputs.check-path }}
+        run: npx --yes prettier${{ inputs.prettier-version && format('@{0}', inputs.prettier-version) || '' }} --check ${{ inputs.check-path }}
