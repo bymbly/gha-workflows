@@ -10,7 +10,7 @@ on:
       markdownlint-version:
         required: false
         type: string
-        default: "latest"
+        default: ""
       cache-dependency-manager:
         required: false
         type: string
@@ -38,4 +38,4 @@ jobs:
         run: npm ci
 
       - name: Lint Check
-        run: npx markdownlint-cli2@${{ inputs.markdownlint-version }}
+        run: npx --yes markdownlint-cli2${{ inputs.markdownlint-version && format('@{0}', inputs.markdownlint-version) || '' }}
