@@ -122,7 +122,7 @@ runs:
 
     - name: Setup Node (from version file)
       if: ${{ steps.resolve.outputs.node_version_file != '' }}
-      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
       with:
         node-version-file: ${{ steps.resolve.outputs.node_version_file }}
         cache: ${{ inputs.cache }}
@@ -134,7 +134,7 @@ runs:
 
     - name: Setup Node (from specified version)
       if: ${{ steps.resolve.outputs.node_version_file == '' }}
-      uses: actions/setup-node@6044e13b5dc448c55e2357c09f80417699197238 # v6
+      uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6
       with:
         node-version: ${{ steps.resolve.outputs.node_version }}
         cache: ${{ inputs.cache }}
