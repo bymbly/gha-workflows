@@ -42,7 +42,7 @@ jobs:
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
 
       - name: Setup Node.js
-        uses: bymbly/gha-workflows/.github/actions/setup-node@a92a48fbf9efb57e64c805719979255215707829 # main
+        uses: bymbly/gha-workflows/.github/actions/setup-node@ad6920a606036c7a13f9e6fab2bb0871e6bf295b # main
         with:
           node-version: ${{ inputs.node-version }}
           cache: ${{ inputs.cache-dependency-manager }}
