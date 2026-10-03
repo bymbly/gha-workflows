@@ -43,7 +43,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup Node.js
-        uses: bymbly/gha-workflows/.github/actions/setup-node@17c0c37a8084fe340fed37bcca5577037a6127da # main
+        uses: bymbly/gha-workflows/.github/actions/setup-node@600d8ef096c8cb8eb5466c26b9f4616e00a21016 # main
         with:
           node-version: ${{ inputs.node-version }}
           cache: ${{ inputs.cache-dependency-manager }}
