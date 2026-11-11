@@ -15,8 +15,8 @@ concurrency:
 jobs:
   prettier-format-check:
     name: Format Check
-    uses: bymbly/gha-workflows/.github/workflows/prettier-format-check.yaml@9073b5de2d69287af7e63c37992ced3bc77118fe # main
+    uses: bymbly/gha-workflows/.github/workflows/prettier-format-check.yaml@f40cf15709f044f84080cef4f2ffde20dfa16d6e # main
 
   markdown-lint-check:
     name: Lint Check
-    uses: bymbly/gha-workflows/.github/workflows/markdown-lint-check.yaml@9073b5de2d69287af7e63c37992ced3bc77118fe # main
+    uses: bymbly/gha-workflows/.github/workflows/markdown-lint-check.yaml@f40cf15709f044f84080cef4f2ffde20dfa16d6e # main
